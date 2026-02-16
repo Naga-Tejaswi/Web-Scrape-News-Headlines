@@ -1,0 +1,29 @@
+import requests
+from bs4 import BeautifulSoup
+
+# Website URL
+url = "https://www.bbc.com/news"
+
+# Send request to website
+headers = {"User-Agent": "Mozilla/5.0"}
+response = requests.get(url, headers=headers)
+
+# Parse HTML
+soup = BeautifulSoup(response.text, "html.parser")
+
+# Find headlines
+headlines = soup.find_all("h2")
+
+news_list = []
+
+for headline in headlines:
+    text = headline.get_text().strip()
+    if text:
+        news_list.append(text)
+
+# Save headlines to file
+with open("headlines.txt", "w", encoding="utf-8") as file:
+    for news in news_list:
+        file.write(news + "\n")
+
+print("✅ Headlines saved successfully!")
